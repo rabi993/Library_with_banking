@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static%}
+{% block content %}
+{% comment %} {{block.super}} {% endcomment %}
+
+
+
+
+<div style="background-color: black" class="d-flex flex-wrap px-5  pt-3 border border-5 rounded-4 border-dark p-2 mb-5">
+    <div style="background-color: gray" class="col-12 border border-5 rounded-4 border-dark p-5">
+        <h2 class="text-center">Click The button for Category wise Filter</h2>
+        <hr/ class="w-80 bg-black m-auto ">
+        <br/>
+        <div class="d-flex justify-content-center gap-3">
+        {% for cat in category %}
+            <div class="form-check ">
+                {% comment %} <input class="form-check-input" type="radio" name="category" id="{{cat.id}}">
+                <label class="form-check-label" for="{{cat.id}}"> {% endcomment %}
+                
+                <a class="btn btn-info my-1 pt-2" href="{% url 'category_wise_book' cat.slug %}"><h5>{{cat.name}}</h5></a>
+                {% comment %} <a class="btn btn-info my-1 pt-2" href=""><h5>{{cat.name}}</h5></a> {% endcomment %}
+                {% comment %} </label> {% endcomment %}
+            </div>
+        {% endfor %}
+        </div>
+          
+    </div>
+    <div  style="background-color: gray" class="col-12 border border-5 rounded-4 border-dark pt-3">
+        <h2 class="text-center"> {{data | length}} Results Found</h2>
+        <hr/ class="w-50 bg-black m-auto ">
+        <div class="d-flex flex-wrap justify-content-center  pt-3">
+
+            {% for book in data %}
+                <div  class="col-sm-3 ">
+                    
+                    
+                            <div class=" card card-body bg-info mx-1 mb-3 border rounded-4">
+                                {% comment %} {% url 'detail_book' book.id %} {% endcomment %}
+                                <a href="" class="text-decoration-none text-dark">
+                                {% comment %} <img src="{{book.image.url}}" class="card-img-top rounded-2 mb-2" alt="..."> {% endcomment %}
+                                {% if book.image %}
+                                <img src="{{ book.image.url }}" class="card-img-top rounded-2 mb-2" alt="book Image">
+                                {% else %}
+                                <img src="{% static 'book.jpg' %}" class="card-img-top rounded-2 mb-2" alt="Default Image">
+                                {% endif %}
+                                </a>  
+                                {% comment %} {% url 'detail_book' book.id %} {% endcomment %}
+                                <h5 class="card-title"><a href="" class="text-decoration-none text-dark">{{book.title}}</a></h5>
+                                <p class="card-text">{{book.content |truncatewords:10}}</p>
+                                <h6 >Category Name:  {{book.category.name}}</h6> 
+                                </h6 >Model:  {{book.title}}</>
+                                <h6 >Price:  {{book.Price}} Taka</h6>
+                                {% comment %} {% url 'detail_book' book.id %} {% endcomment %}
+                                <a href="{% url 'detail_book' book.id %} "class="text-decoration-none btn btn-dark w-50 m-auto"> View Details</a> 
+                                
+                            </div>
+                    
+                    
+                </div>
+            {% endfor %}
+          </div>
+    </div>
+
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+
+{% endblock %}

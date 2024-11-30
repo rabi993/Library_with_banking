@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block head_title %}Buy List{% endblock %}
+{% block content %}
+
+<div class="my-10 py-3 px-4 bg-white rounded-xl shadow-md">
+  <h1 class="font-bold text-3xl text-center pb-5 pt-2">Your Buy List</h1>
+  <hr />
+  <table class="table-auto mx-auto w-full px-5 rounded-xl mt-8 border dark:border-neutral-500">
+    <thead class="bg-purple-900 text-white text-left">
+      <tr>
+        <th class="px-4 py-2">Date</th>
+        <th class="px-4 py-2">Item</th>
+        <th class="px-4 py-2">Quantity</th>
+        <th class="px-4 py-2">Price</th>
+        <th class="px-4 py-2">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in user_items %}
+      <tr class="border-b dark:border-neutral-500">
+        <td class="px-4 py-2">{{ item.timestamp|date:"F d, Y h:i A" }}</td>
+        <td class="px-4 py-2">{{ item.product.name }}</td>
+        <td class="px-4 py-2">{{ item.quantity }}</td>
+        <td class="px-4 py-2">${{ item.product.price|floatformat:2 }}</td>
+        <td class="px-4 py-2">${{ item.quantity|multiply:item.product.price|floatformat:2 }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center py-4">No items in your buy list.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

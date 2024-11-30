@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_title %}Borrow List{% endblock %}
+{% block content %}
+
+
+<div style="background-color: black" class="d-flex flex-wrap px-5  pt-3 border border-5 rounded-4 border-dark p-2">
+    
+  <div  style="background-color: gray" class="col-12 border border-5 rounded-4 border-dark ">
+      <h3 class="text-center">{{ user.first_name }} {{ user.last_name }}'s Borrow Book List</h3>
+      <h4 class="text-center"> {{cart.items.all | length}} Results Found</h4>
+      <hr/ class="w-50 bg-black m-auto ">
+      <div class="d-flex flex-wrap justify-content-center  pt-3">
+          {% if cart and cart.items.all %}
+              {% for item in cart.items.all %}
+              <div  class="col-sm-3 ">
+                  <div  class="card card-body bg-info mx-1 mb-3 border rounded-4 ">
+                      <div class=" ">
+                          {% if item.book.image %}
+                          <img src="{{ item.book.image.url }}" class="card-img-top rounded-2 mb-2" alt="book Image">
+                          {% else %}
+                          <img src="{% static 'book.png' %}" class="card-img-top rounded-2 mb-2" alt="Default Image">
+                          {% endif %}
+                          <div class="w-50 m-auto text-center">
+                              <h4>Model:  {{ item.book.title }} </h4>
+                              <h6 >Category Name:  {{item.book.category.name}}</h6>
+                              <h6>Quantity: {{ item.quantity }}</h6>
+                              <a href="{% url 'detail_book' item.book.id %}"class="text-decoration-none btn btn-dark w-75  m-auto"> View Details</a> <br/>
+                              {% comment %} <a href="" class="btn btn-warning mt-2">Edit</a>
+                              <a href="" class="btn btn-danger mt-2">Detete</a> {% endcomment %}
+                              
+                          </div>
+                          
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+          {% else %}
+              <p>Your cart is empty.</p>
+          {% endif %}
+      </div>
+  </div>
+  </div>
+<br/>
+<br/>
+
+<div style="background-color: black" class="d-flex flex-wrap px-5  pt-3 border border-5 rounded-4 border-dark p-2">
+  
+  <div  style="background-color: gray" class="col-12 border border-5 rounded-4 border-dark  pb-3">
+      <h3 class="text-center">{{ user.first_name }} {{ user.last_name }}'s Cart</h3>
+      <h4 class="text-center"> {{cart.items.all | length}} Results Found</h4>
+      <hr/ class="w-50 bg-black m-auto ">
+
+      <table style="background-color: white" class="table-auto mx-auto w-full px-5   mt-8 border dark:border-neutral-500 ">
+          <thead class="bg-purple-900 text-white text-left">
+            <tr>
+              <th class="px-4 py-2">Borrow_Date</th>
+              <th class="px-4 py-2">Book</th>
+              <th class="px-4 py-2">Category</th>
+              <th class="px-4 py-2">Quantity</th>
+              <th class="px-4 py-2">Unit_Price</th>
+              <th class="px-4 py-2">Total</th>
+              <th class="px-4 py-2">Balance</th>
+              <th class="px-4 py-2">Return</th>
+              {% comment %} <th class="px-4 py-2">Total</th> {% endcomment %}
+            </tr>
+          </thead>
+          <tbody>
+              
+            {%  for item in cart.items.all %}
+            
+              <tr class="border-b dark:border-neutral-500">
+                  <td class="px-1 py-2">{{ item.timestamp|date:"F d, Y h:i A" }}</td>
+                  <td class="px-4 py-2"> {{ item.book.title }} </td>
+                  <td class="px-4 py-2"> {{item.book.category.name}} </td>
+                  <td class="px-4 py-2">{{ item.quantity }}</td>
+                  <td class="px-4 py-2">{{item.price}} Taka</td>
+                  {% comment %} <td class="px-4 py-2">[{{item.price}} X {{ item.quantity }}]= {{ item.quantity|multiply:item.price|floatformat:2 }}Taka</td> {% endcomment %}
+                  <td class="px-4 py-2"> {{ item.quantity|multiply:item.price|floatformat:2 }}Taka</td>
+                  
+                  <td class="px-4 py-2">{{account_balance }} Taka</td>
+                  <td class="px-1 py-2"><a href="{% url 'return_item' item.id %}"class="text-decoration-none btn btn-dark w-75  m-auto"> Return </a> </td>
+                  {% comment %} <td class="px-4 py-2">${{ item.quantity|multiply:item.product.price|floatformat:2 }}</td> {% endcomment %}
+              </tr>
+              {% empty %}
+              <tr>
+                  <td colspan="4" class="text-center py-4">No items in your borrow list.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+      
+  </div>
+  </div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+{% endblock %}
+
+
